@@ -18,20 +18,18 @@ using System.Collections.Specialized;
 
 namespace PracticaFinal
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+   
     public partial class MainWindow : Window
     {
-        
-        ObservableCollection<Comida> comidas;
 
+        ObservableCollection<Dia> dias;
 
         public MainWindow()
         {
             InitializeComponent();
-            comidas = new ObservableCollection<Comida>();
-            comidas.CollectionChanged += this.onComidasChange;
+            dias = new ObservableCollection<Dia>();
+            dias.CollectionChanged += onDiasChange;
+            chart.PropertyChanged += sizeChanged;
         }
 
         public void ShowAddCalories(object sender, RoutedEventArgs e)
@@ -42,18 +40,80 @@ namespace PracticaFinal
             addCalories.ShowDialog();
             if (addCalories.DialogResult == true)
             {
-                Comida nuevaComida = addCalories.comidaInput;
-                IEnumerable<Comida> query = comidas.Where(c => c.fecha.Equals(nuevaComida.fecha) && c.comida.Equals(nuevaComida.comida));
-                if (!query.Any()) comidas.Add(nuevaComida);
-                else MessageBox.Show("Ya existe esa comida");
+                DateTime fecha = addCalories.fecha_;
+                String comida = addCalories.comida_;
+                double calorias = addCalories.calorias_;
+
+                IEnumerable<Dia> results = dias.Where(d => d.fecha.Equals(fecha));
+                if (!results.Any())
+                {
+                    Dia d = new Dia(fecha, new Dictionary<String, double>() { { comida, calorias } });
+                    d.PropertyChanged += onDiaChange;
+                    dias.Add(d);
+                }
+                else
+                {
+                    foreach (Dia d in results)
+                    {
+                        if (d.Comidas.ContainsKey(comida)) MessageBox.Show("Ya existe esa comida");
+                        else
+                        {
+                            Dictionary<String, double> dic = d.Comidas;
+                            dic.Add(comida, calorias);
+                            d.Comidas = dic;
+                        }
+                    }
+                }    
             }
         }
 
-        void onComidasChange(object sender, NotifyCollectionChangedEventArgs e)
+        void onDiasChange(Object sender, NotifyCollectionChangedEventArgs e)
         {
-            
-           
+            Dia d = dias.Last();
+            int width = (chart.X2 - chart.X1) / 32;
+            int x = chart.X1 + (width * d.fecha.Day);
 
+            List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
+            
+            foreach(Line l in lineas)
+            {
+                l.X1 = x;
+                l.X2 = x;
+                chart.Children.Add(l);
+            }
+        }
+
+        void onDiaChange(Object sender, PropertyChangedEventArgs e)
+        {
+            Dia d = (Dia)sender;
+            int width = (chart.X2 - chart.X1) / 32;
+            int x = chart.X1 + (width * d.fecha.Day);
+
+            List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
+
+            foreach (Line l in lineas)
+            {
+                l.X1 = x;
+                l.X2 = x;
+                chart.Children.Add(l);
+            }
+        }
+
+        void sizeChanged(object sender,  PropertyChangedEventArgs e)
+        {
+            int width = (chart.X2 - chart.X1) / 32;
+
+            foreach (Dia d in dias)
+            {
+                List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
+                int x = chart.X1 + (width * d.fecha.Day);
+                foreach (Line l in lineas)
+                {
+                    l.X1 = x;
+                    l.X2 = x;
+                    chart.Children.Add(l);
+                }
+            }
         }
     }
 }

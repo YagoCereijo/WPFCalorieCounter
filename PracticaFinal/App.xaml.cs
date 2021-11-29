@@ -14,6 +14,5 @@ namespace PracticaFinal
     /// </summary>
     public partial class App : Application
     {
-        public ObservableCollection<Comida> Comidas { get; set; } = new ObservableCollection<Comida>();
     }
 }

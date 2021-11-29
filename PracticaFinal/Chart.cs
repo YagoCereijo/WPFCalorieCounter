@@ -1,30 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PracticaFinal
 {
-    public class Chart: Canvas
-    {   
+    public class Chart: Canvas, INotifyPropertyChanged
+    {
+        private int x1, x2, y1, y2;
 
-        public int x1, x2, y1, y2;
+        public int X1
+        {
+            get { return x1; }
+            set { x1 = value;}
+        }
+
+        public int X2
+        {
+            get { return x2; }
+            set { x2 = value; OnPropertyChanged("X2"); }
+        }
+
+        public int Y1
+        {
+            get { return y1; }
+            set { y1 = value; }
+        }
+
+        public int Y2
+        {
+            get { return y2; }
+            set { y2 = value; OnPropertyChanged("Y2"); }
+        }
+
+
 
         public Chart()
         {
-            this.Loaded += new RoutedEventHandler(Draw);
-            this.SizeChanged += new SizeChangedEventHandler(Draw);
+            Loaded += new RoutedEventHandler(Draw);
+            SizeChanged += new SizeChangedEventHandler(Draw);
         }
 
         void Draw(object sender, RoutedEventArgs e)
@@ -34,23 +50,23 @@ namespace PracticaFinal
             int widthPoints = (int)this.ActualWidth;
             int heightPoints = (int)this.ActualHeight;
 
-            int y1 = heightPoints / 10;
-            int y2 = heightPoints - y1;
-            int x1 = widthPoints / 10;
-            int x2 = widthPoints - x1;
+            Y1 = heightPoints / 10;
+            Y2 = heightPoints - y1;
+            X1 = widthPoints / 10;
+            X2 = widthPoints - x1;
 
 
             Line xAxis = new Line();
-            xAxis.X1 = x1;
-            xAxis.Y1 = y2;
-            xAxis.X2 = x2;
-            xAxis.Y2 = y2;
+            xAxis.X1 = X1;
+            xAxis.Y1 = Y2;
+            xAxis.X2 = X2;
+            xAxis.Y2 = Y2;
 
             Line yAxis = new Line();
-            yAxis.X1 = x1;
-            yAxis.X2 = x1;
-            yAxis.Y1 = y1;
-            yAxis.Y2 = y2;
+            yAxis.X1 = X1;
+            yAxis.X2 = X1;
+            yAxis.Y1 = Y1;
+            yAxis.Y2 = Y2;
 
 
             xAxis.Stroke = Brushes.Black;
@@ -59,6 +75,13 @@ namespace PracticaFinal
             this.Children.Add(xAxis);
             this.Children.Add(yAxis);
 
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(String propertyname)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
         }
     }
 }

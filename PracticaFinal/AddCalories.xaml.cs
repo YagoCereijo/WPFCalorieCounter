@@ -17,7 +17,9 @@ namespace PracticaFinal
     /// </summary>
     public partial class AddCalories : Window
     {
-        public Comida comidaInput;
+        public DateTime fecha_;
+        public String comida_;
+        public double calorias_;
         
         public AddCalories()
         {
@@ -26,10 +28,9 @@ namespace PracticaFinal
 
         private void addCalories(object sender, RoutedEventArgs e)
         {
-            comidaInput = new Comida();
-            comidaInput.fecha = calendario.SelectedDate.Value;
-            comidaInput.comida = comida.Text;
-            comidaInput.calorias = calorias.Value;
+            fecha_ = calendario.SelectedDate.Value;
+            comida_ = comida.Text;
+            calorias_ = calorias.Value;
             DialogResult = true;
         }
 
