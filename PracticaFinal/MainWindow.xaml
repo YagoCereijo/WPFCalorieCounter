@@ -24,7 +24,7 @@
         <Button Grid.Row="0" Grid.Column="0" Content="&lt;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold"></Button>
         <Button Grid.Row="0" Grid.Column="2" Content="&gt;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" FontWeight="Bold"></Button>
         <Button Grid.Row="0" Grid.Column="2" Content="+" BorderThickness="0" Background="Transparent" Margin="20,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="ShowAddCalories"></Button>
-        <local:Chart x:Name="monthlychart" Grid.Row="1" Grid.ColumnSpan="3"/>
+        <local:Chart x:Name="chart" Grid.Row="1" Grid.ColumnSpan="3"/>
 
     </Grid>
 </Window>

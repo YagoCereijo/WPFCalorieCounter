@@ -51,7 +51,9 @@ namespace PracticaFinal
 
         void onComidasChange(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //monthlychart.addData(comidas);
+            
+           
+
         }
     }
 }

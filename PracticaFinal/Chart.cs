@@ -18,6 +18,9 @@ namespace PracticaFinal
 {
     public class Chart: Canvas
     {   
+
+        public int x1, x2, y1, y2;
+
         public Chart()
         {
             this.Loaded += new RoutedEventHandler(Draw);
@@ -48,6 +51,7 @@ namespace PracticaFinal
             yAxis.X2 = x1;
             yAxis.Y1 = y1;
             yAxis.Y2 = y2;
+
 
             xAxis.Stroke = Brushes.Black;
             yAxis.Stroke = Brushes.Black;
