@@ -1,0 +1,34 @@
+﻿<Window x:Class="PracticaFinal.AddCalories"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PracticaFinal"
+        mc:Ignorable="d"
+        Title="Add Calories" Height="350" Width="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="175"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Viewbox Grid.Row="0" Stretch="Fill">
+            <Calendar Name="calendario" BorderThickness="0"></Calendar>
+        </Viewbox>
+        <ComboBox Name="comida" Grid.Row="1" Height="20" Width="100" Text="SELECT" IsEditable="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <ComboBoxItem>DESAYUNO</ComboBoxItem>
+            <ComboBoxItem>APERITIVO</ComboBoxItem>
+            <ComboBoxItem>COMIDA</ComboBoxItem>
+            <ComboBoxItem>MERIENDA</ComboBoxItem>
+            <ComboBoxItem>CENA</ComboBoxItem>
+            <ComboBoxItem>OTROS</ComboBoxItem>
+        </ComboBox>
+        <DockPanel Grid.Row="2" VerticalAlignment="Center" Margin="10">
+            <TextBox Text="{Binding ElementName=calorias, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Center" Width="40" />
+            <Slider Name="calorias" Maximum="1500"/>
+        </DockPanel>
+        <Button Content="ADD" Grid.Row="3" Height="30" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="40,0" Click="addCalories"></Button>
+        <Button Content="CANCEL" Grid.Row="3" Height="30" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0" Click="closeWindow"></Button>
+    </Grid>
+</Window>
