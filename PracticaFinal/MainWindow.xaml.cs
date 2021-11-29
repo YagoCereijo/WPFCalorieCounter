@@ -32,7 +32,6 @@ namespace PracticaFinal
             InitializeComponent();
             comidas = new ObservableCollection<Comida>();
             comidas.CollectionChanged += this.onComidasChange;
-            monthlychart.I
         }
 
         public void ShowAddCalories(object sender, RoutedEventArgs e)
@@ -52,7 +51,7 @@ namespace PracticaFinal
 
         void onComidasChange(object sender, NotifyCollectionChangedEventArgs e)
         {
-            monthlychart.addData(comidas);
+            //monthlychart.addData(comidas);
         }
     }
 }

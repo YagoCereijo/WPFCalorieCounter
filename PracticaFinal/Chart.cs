@@ -31,17 +31,17 @@ namespace PracticaFinal
             int widthPoints = (int)this.ActualWidth;
             int heightPoints = (int)this.ActualHeight;
 
-            int y1 = heightPoints - heightPoints / 10;
-            int y2 = y1 + heightPoints;
+            int y1 = heightPoints / 10;
+            int y2 = heightPoints - y1;
             int x1 = widthPoints / 10;
             int x2 = widthPoints - x1;
 
 
             Line xAxis = new Line();
             xAxis.X1 = x1;
-            xAxis.Y1 = y1;
+            xAxis.Y1 = y2;
             xAxis.X2 = x2;
-            xAxis.Y2 = y1;
+            xAxis.Y2 = y2;
 
             Line yAxis = new Line();
             yAxis.X1 = x1;
