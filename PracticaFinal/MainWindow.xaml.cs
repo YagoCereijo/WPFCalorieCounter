@@ -41,23 +41,27 @@ namespace PracticaFinal
                 String comida = addCalories.comida_;
                 double calorias = addCalories.calorias_;
 
-                IEnumerable<Dia> results = dias.Where(d => d.Fecha.Equals(fecha));
-                if (!results.Any())
+                IEnumerable<Dia> resultsDia = dias.Where(d => d.Fecha.Equals(fecha));
+                if (!resultsDia.Any())
                 {
-                    Dia d = new Dia(fecha, new Dictionary<String, double>() { { comida, calorias } });
+                    Dia d = new Dia(fecha, new List<Comida>{ new Comida(comida, calorias) });
                     dias.Add(d);
                 }
                 else
                 {
-                    foreach (Dia d in results)
+                    bool exists = false;
+                    foreach (Dia d in resultsDia)
                     {
-                        if (d.Comidas.ContainsKey(comida)) MessageBox.Show("Ya existe esa comida");
-                        else
+                        foreach (Comida c in d.Comidas)
                         {
-                            Dictionary<String, double> dic = d.Comidas;
-                            dic.Add(comida, calorias);
-                            d.Comidas = dic;
+                            if (c.Nombre.Equals(comida))
+                            {
+                                exists = true;
+                            }
                         }
+
+                        if (exists) MessageBox.Show("Ya existe esa comida");
+                        else d.Comidas.Add(new Comida(comida, calorias));
                     }
                 }    
             }
@@ -113,8 +117,6 @@ namespace PracticaFinal
             }
 
             listaCalorias.lista.Items.Refresh();
-
-
         }
 
         void sizeChanged(object sender,  PropertyChangedEventArgs e)
