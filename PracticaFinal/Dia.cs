@@ -19,8 +19,7 @@ namespace PracticaFinal
             { "OTROS", Brushes.Pink } 
         };
         public static int maxCalories = 1500;
-        public DateTime fecha;
-
+        public DateTime Fecha { get; set; }
 
         private Dictionary<String, double> comidas;
 
@@ -30,9 +29,24 @@ namespace PracticaFinal
             set { comidas = value; OnPropertyChanged("Comidas"); }
         }
 
+        public int Calorias
+        {
+            get
+            {
+                int cal = 0;
+                foreach(int c in Comidas.Values)
+                {
+                    cal += c;
+                }
+                return cal;
+            }
+
+            set { Calorias = value; }
+        }
+
         public Dia(DateTime f, Dictionary<String, double> c)
         {
-            this.fecha = f;
+            this.Fecha = f;
             this.comidas = c;
         }
 

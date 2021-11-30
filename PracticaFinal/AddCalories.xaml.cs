@@ -36,7 +36,6 @@ namespace PracticaFinal
 
         private void closeWindow(object sender, RoutedEventArgs e)
         {
-
             DialogResult = false;
         }
     }
