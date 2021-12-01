@@ -39,14 +39,19 @@ namespace PracticaFinal
 
         public Chart()
         {
-            Loaded += new RoutedEventHandler(Draw);
-            SizeChanged += new SizeChangedEventHandler(Draw);
+            Loaded += Update;
+            SizeChanged += Update;
         }
 
-        void Draw(object sender, RoutedEventArgs e)
+        void Update(object sender, RoutedEventArgs e)
+        {
+            Draw();
+        }
+
+        public void Draw()
         {
             this.Children.Clear();
-            
+
             int widthPoints = (int)this.ActualWidth;
             int heightPoints = (int)this.ActualHeight;
 
@@ -74,7 +79,6 @@ namespace PracticaFinal
 
             this.Children.Add(xAxis);
             this.Children.Add(yAxis);
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

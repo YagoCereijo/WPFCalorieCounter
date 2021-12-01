@@ -21,5 +21,10 @@ namespace PracticaFinal
         {
             InitializeComponent();
         }
+
+        private void listaDiaSourceChanged(object sender, SelectionChangedEventArgs e)
+        {
+            listaDia.ItemsSource = ((Dia)lista.SelectedItem).Comidas;
+        }
     }
 }

@@ -12,10 +12,31 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
 
-        <ListView Name="lista" Margin="20" Grid.Row="0">
+        <ListView Name="lista" Margin="20" Grid.Row="0" SelectionChanged="listaDiaSourceChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="100" Header="FECHA" DisplayMemberBinding="{Binding Fecha, StringFormat = {}{0:dd-MM-yyyy}}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                    <GridViewColumn Width="100" Header="CALORIAS" DisplayMemberBinding="{Binding Calorias}">
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Name="listaDia" Margin="20" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="100" Header="COMIDA" DisplayMemberBinding="{Binding Nombre}">
                         <GridViewColumn.HeaderContainerStyle>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Left" />

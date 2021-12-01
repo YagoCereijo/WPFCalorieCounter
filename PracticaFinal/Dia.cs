@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -10,15 +11,15 @@ namespace PracticaFinal
 {
     public class Dia : INotifyPropertyChanged
     {
-       
-        private static List<String> nombreComidas = new List<String> {"DESAYUNO", "APERITIVO", "COMIDA", "MERIENDA", "CENA", "OTROS"};
+
+        private static List<String> nombreComidas = new List<String> { "DESAYUNO", "APERITIVO", "COMIDA", "MERIENDA", "CENA", "OTROS" };
         private static Dictionary<String, Brush> colorComidas = new Dictionary<String, Brush> {
             { "DESAYUNO", Brushes.Red },
             { "APERITIVO", Brushes.Yellow },
             { "COMIDA", Brushes.Green },
             { "MERIENDA", Brushes.Blue },
             { "CENA", Brushes.Purple },
-            { "OTROS", Brushes.Pink } 
+            { "OTROS", Brushes.Pink }
         };
         private static int maxCalories = 1500;
         public ObservableCollection<Comida> comidas;
@@ -88,16 +89,47 @@ namespace PracticaFinal
         {
             OnPropertyChanged("Comidas");
         }
+
+        public static explicit operator Dia(ListView v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Comida
     {
+        private static Dictionary<String, Brush> colorComidas = new Dictionary<String, Brush> {
+            { "DESAYUNO", Brushes.Red },
+            { "APERITIVO", Brushes.Yellow },
+            { "COMIDA", Brushes.Green },
+            { "MERIENDA", Brushes.Blue },
+            { "CENA", Brushes.Purple },
+            { "OTROS", Brushes.Pink }
+        };
+        private static int maxCalories = 1500;
+
         public string Nombre { get; set; }
         public double Calorias { get; set; }
         public Comida(string n, double c)
         {
             Nombre = n;
             Calorias = c;
+        }
+
+        public Line getLine(int minY, int maxY, int width)
+        {           
+            int y = maxY;
+            int height = maxY - minY;
+           
+            Line linea = new Line();
+            linea.Y1 = y;
+            y = y - ((int)Calorias * height / maxCalories);
+            linea.Y2 = y;
+
+            linea.StrokeThickness = width;
+            linea.Stroke = colorComidas[Nombre];
+
+            return linea;
         }
     }
 

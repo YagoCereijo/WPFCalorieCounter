@@ -6,6 +6,7 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using System.Windows.Controls;
 
 namespace PracticaFinal
 { 
@@ -28,6 +29,7 @@ namespace PracticaFinal
             listaCalorias = new ListaCalorias();
             listaCalorias.lista.ItemsSource = dias;
             listaCalorias.Owner = this;
+            listaCalorias.lista.SelectionChanged += diaChart;
             listaCalorias.Show();
         }
 
@@ -117,7 +119,7 @@ namespace PracticaFinal
                 chart.Children.Add(l);
             }
 
-            listaCalorias.lista.Items.Refresh();
+            if(listaCalorias.IsEnabled) listaCalorias.lista.Items.Refresh();
         }
 
         void sizeChanged(object sender,  PropertyChangedEventArgs e)
@@ -135,6 +137,26 @@ namespace PracticaFinal
                     chart.Children.Add(l);
                 }
             }
+        }
+
+        void diaChart(object sender, SelectionChangedEventArgs e)
+        {
+            chart.Draw();
+            Dia d = (Dia)((ListView)sender).SelectedItem;
+            int width = (chart.X2 - chart.X1) / 6;
+            int i = 1;
+
+            foreach(Comida c in d.Comidas)
+            {
+                Line linea = c.getLine(chart.Y1, chart.Y2, width);
+                int x = (chart.X1 + (width * i))-(width/2) + 1;
+                linea.X1 = x;
+                linea.X2 = x;
+                chart.Children.Add(linea);
+                i++;
+            }
+
+
         }
     }
 }
