@@ -12,7 +12,7 @@ namespace PracticaFinal
     public partial class MainWindow : Window
     {
         ObservableCollection<Dia> dias;
-        ListaCalorias listaCalorias = new ListaCalorias();
+        ListaCalorias listaCalorias;
 
         public MainWindow()
         {
@@ -25,6 +25,7 @@ namespace PracticaFinal
 
         public void ShowDayList(object sender, RoutedEventArgs e)
         {
+            listaCalorias = new ListaCalorias();
             listaCalorias.lista.ItemsSource = dias;
             listaCalorias.Owner = this;
             listaCalorias.Show();
@@ -44,7 +45,7 @@ namespace PracticaFinal
                 IEnumerable<Dia> resultsDia = dias.Where(d => d.Fecha.Equals(fecha));
                 if (!resultsDia.Any())
                 {
-                    Dia d = new Dia(fecha, new List<Comida>{ new Comida(comida, calorias) });
+                    Dia d = new Dia(fecha, new ObservableCollection<Comida>{ new Comida(comida, calorias) });
                     dias.Add(d);
                 }
                 else
@@ -53,15 +54,15 @@ namespace PracticaFinal
                     foreach (Dia d in resultsDia)
                     {
                         foreach (Comida c in d.Comidas)
-                        {
                             if (c.Nombre.Equals(comida))
-                            {
                                 exists = true;
-                            }
-                        }
 
                         if (exists) MessageBox.Show("Ya existe esa comida");
-                        else d.Comidas.Add(new Comida(comida, calorias));
+                        else
+                        {
+                            
+                            d.Comidas.Add(new Comida(comida, calorias));
+                        }
                     }
                 }    
             }

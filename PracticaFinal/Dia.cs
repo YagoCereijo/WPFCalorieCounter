@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -19,7 +21,8 @@ namespace PracticaFinal
             { "OTROS", Brushes.Pink } 
         };
         private static int maxCalories = 1500;
-        private List<Comida> comidas = new List<Comida>();
+        public ObservableCollection<Comida> comidas;
+
 
         public double Calorias
         {
@@ -33,18 +36,20 @@ namespace PracticaFinal
             set { Calorias = value; }
         }
         public DateTime Fecha { get; set; }
-        public List<Comida> Comidas{
+        public ObservableCollection<Comida> Comidas{
             get
             {
                 return comidas;
             }
             set 
             {
-               comidas = value; OnPropertyChanged("Comidas"); 
+               comidas = value;
+               OnPropertyChanged("Comidas");
+               comidas.CollectionChanged += OnComidasChange;
             }
         }
        
-        public Dia(DateTime f, List<Comida> c)
+        public Dia(DateTime f, ObservableCollection<Comida> c)
         {
             Fecha = f;
             Comidas = c;
@@ -77,6 +82,11 @@ namespace PracticaFinal
         void OnPropertyChanged(String propertyname)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
+        }
+
+        void OnComidasChange(Object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged("Comidas");
         }
     }
 
