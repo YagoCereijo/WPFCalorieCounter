@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,8 +35,6 @@ namespace PracticaFinal
             get { return y2; }
             set { y2 = value; OnPropertyChanged("Y2"); }
         }
-
-
 
         public Chart()
         {
@@ -80,6 +79,47 @@ namespace PracticaFinal
             this.Children.Add(xAxis);
             this.Children.Add(yAxis);
         }
+
+        public void DrawMonth(List<Dia> dias)
+        {
+            Draw();
+            int width = (X2 - X1) / 32;
+
+            foreach (Dia d in dias)
+            {
+                int x = X1 + (width * d.Fecha.Day);
+
+                List<Line> lineas = d.getPolyline(Y1, Y2, width);
+
+                foreach (Line l in lineas)
+                {
+                    l.X1 = x;
+                    l.X2 = x;
+                    Children.Add(l);
+                }
+            }
+        }
+
+        public void DrawDay(List<Comida> comidas)
+        {
+            Draw();
+            int width = (X2 - X1) / 6;
+            int i = 1;
+
+            foreach (Comida c in comidas)
+            {
+                Line linea = c.getLine(Y1, Y2, width);
+                int x = (X1 + (width * i)) - (width / 2) + 1;
+                linea.X1 = x;
+                linea.X2 = x;
+                Children.Add(linea);
+                i++;
+            }
+        }
+
+
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

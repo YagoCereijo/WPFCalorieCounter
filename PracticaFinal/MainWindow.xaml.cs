@@ -14,22 +14,29 @@ namespace PracticaFinal
     {
         ObservableCollection<Dia> dias;
         ListaCalorias listaCalorias;
+        Dia diaActual;
 
         public MainWindow()
         {
             InitializeComponent();
             dias = new ObservableCollection<Dia>();
-            dias.CollectionChanged += onDiasChange;
+            dias.CollectionChanged += mesChart;
             dias.CollectionChanged += onDiasManageInnerChange;
-            chart.PropertyChanged += sizeChanged;
+
+            monthlyChart.PropertyChanged += sizeChanged;
+            dailyChart.PropertyChanged += sizeChanged;
         }
+
+
+
+        // WINDOWS RAISE EVENTS
 
         public void ShowDayList(object sender, RoutedEventArgs e)
         {
             listaCalorias = new ListaCalorias();
             listaCalorias.lista.ItemsSource = dias;
             listaCalorias.Owner = this;
-            listaCalorias.lista.SelectionChanged += diaChart;
+            listaCalorias.lista.SelectionChanged += diaChartChanged;
             listaCalorias.Show();
         }
 
@@ -70,93 +77,61 @@ namespace PracticaFinal
             }
         }
 
-        void onDiasChange(Object sender, NotifyCollectionChangedEventArgs e)
-        {
-            Dia d = dias.Last();
-            int width = (chart.X2 - chart.X1) / 32;
-            int x = chart.X1 + (width * d.Fecha.Day);
 
-            List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
-            
-            foreach(Line l in lineas)
-            {
-                l.X1 = x;
-                l.X2 = x;
-                chart.Children.Add(l);
-            }
-        }
+
+
+        // MANAGEMENT OF THE CHART
 
         void onDiasManageInnerChange(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null)
             {
-                foreach (Object item in e.NewItems)
+                foreach (Dia item in e.NewItems)
                 {
-                    ((INotifyPropertyChanged)item).PropertyChanged += onDiaChange;
+                    ((INotifyPropertyChanged)item).PropertyChanged += mesChart;
+                    item.Comidas.CollectionChanged += diaChart;
                 }
             }
             if (e.OldItems != null)
             {
-                foreach (Object item in e.OldItems)
+                foreach (Dia item in e.OldItems)
                 {
-                    ((INotifyPropertyChanged)item).PropertyChanged -= onDiaChange;
+                    ((INotifyPropertyChanged)item).PropertyChanged -= mesChart;
+                    item.Comidas.CollectionChanged -= diaChart;
                 }
             }
         }
 
-        void onDiaChange(Object sender, PropertyChangedEventArgs e)
-        {
-            Dia d = (Dia)sender;
-            int width = (chart.X2 - chart.X1) / 32;
-            int x = chart.X1 + (width * d.Fecha.Day);
-
-            List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
-
-            foreach (Line l in lineas)
-            {
-                l.X1 = x;
-                l.X2 = x;
-                chart.Children.Add(l);
-            }
-
-            if(listaCalorias.IsEnabled) listaCalorias.lista.Items.Refresh();
-        }
-
+        void mesChart(Object sender, EventArgs e){ monthlyChart.DrawMonth(dias.ToList()); }
+        
         void sizeChanged(object sender,  PropertyChangedEventArgs e)
         {
-            int width = (chart.X2 - chart.X1) / 32;
-
-            foreach (Dia d in dias)
-            {
-                List<Line> lineas = d.getPolyline(chart.Y1, chart.Y2, width);
-                int x = chart.X1 + (width * d.Fecha.Day);
-                foreach (Line l in lineas)
-                {
-                    l.X1 = x;
-                    l.X2 = x;
-                    chart.Children.Add(l);
-                }
-            }
+            monthlyChart.DrawMonth(dias.ToList());
+            if(dailyChart.Visibility == Visibility.Visible) { dailyChart.DrawDay(diaActual.Comidas.ToList()); }
+        }
+        void diaChartChanged(object sender, EventArgs e)
+        {
+            monthlyChart.Visibility = Visibility.Hidden;
+            dailyChart.Visibility = Visibility.Visible;
+            backButton.Visibility = Visibility.Visible;
+            diaActual = (Dia)((ListView)sender).SelectedItem;
+            dailyChart.DrawDay(diaActual.Comidas.ToList());
         }
 
-        void diaChart(object sender, SelectionChangedEventArgs e)
+        void diaChart(object sender, EventArgs e)
         {
-            chart.Draw();
-            Dia d = (Dia)((ListView)sender).SelectedItem;
-            int width = (chart.X2 - chart.X1) / 6;
-            int i = 1;
-
-            foreach(Comida c in d.Comidas)
+            if(dailyChart.Visibility == Visibility.Visible)
             {
-                Line linea = c.getLine(chart.Y1, chart.Y2, width);
-                int x = (chart.X1 + (width * i))-(width/2) + 1;
-                linea.X1 = x;
-                linea.X2 = x;
-                chart.Children.Add(linea);
-                i++;
+                dailyChart.DrawDay(diaActual.Comidas.ToList());
             }
+            
+        }
 
-
+        private void backToMonthly(object sender, RoutedEventArgs e)
+        {
+            monthlyChart.Visibility = Visibility.Visible;
+            dailyChart.Visibility = Visibility.Hidden;
+            backButton.Visibility = Visibility.Hidden;
         }
     }
 }
