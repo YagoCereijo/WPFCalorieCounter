@@ -80,12 +80,25 @@ namespace PracticaFinal
             this.Children.Add(yAxis);
         }
 
-        public void DrawMonth(List<Dia> dias)
+        public void DrawMonth(List<Dia> dias, int mes, int anio)
         {
             Draw();
             int width = (X2 - X1) / 32;
+            int y = Y2;
+            int height = Y2 - Y1;
+            for (int i = 1500; i<=1500*6; i += 1500)
+            {
+                TextBlock label = new TextBlock();
+                label.Text = i.ToString() + " -";
+                label.Foreground = Brushes.Black;
+                Canvas.SetLeft(label, X1 - 30);
+                Canvas.SetBottom(label, Y1 + i*height/(1500*6) - 6 );
+                Children.Add(label);
+            }
 
-            foreach (Dia d in dias)
+            List<Dia> select = dias.FindAll(d => d.Fecha.Date.Month == mes && d.Fecha.Date.Year == anio);
+
+            foreach (Dia d in select)
             {
                 int x = X1 + (width * d.Fecha.Day);
 
@@ -95,8 +108,19 @@ namespace PracticaFinal
                 {
                     l.X1 = x;
                     l.X2 = x;
+
+                    l.ToolTip = d.Fecha;
+                  
                     Children.Add(l);
                 }
+
+                TextBlock label = new TextBlock();
+                label.Text = d.Fecha.Day.ToString();
+                label.Foreground = Brushes.Black;
+                Children.Add(label);
+                Canvas.SetLeft(label, x - 6);
+                Canvas.SetTop(label, Y2);
+                
             }
         }
 
@@ -116,10 +140,6 @@ namespace PracticaFinal
                 i++;
             }
         }
-
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

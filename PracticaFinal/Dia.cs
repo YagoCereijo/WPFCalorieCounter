@@ -22,6 +22,7 @@ namespace PracticaFinal
             { "OTROS", Brushes.Pink }
         };
         private static int maxCalories = 1500;
+        
         public ObservableCollection<Comida> comidas;
 
 
@@ -33,10 +34,10 @@ namespace PracticaFinal
                 foreach (Comida c in Comidas) cal += c.Calorias;
                 return cal;
             }
-
-            set { Calorias = value; }
         }
+
         public DateTime Fecha { get; set; }
+
         public ObservableCollection<Comida> Comidas{
             get
             {
@@ -44,17 +45,26 @@ namespace PracticaFinal
             }
             set 
             {
-               comidas = value;
-               OnPropertyChanged("Comidas");
-               comidas.CollectionChanged += OnComidasChange;
+                if (value != null)
+                {
+                    comidas = value;
+                    OnPropertyChanged("Comidas");
+                    comidas.CollectionChanged += OnComidasChange;
+                }
             }
         }
-       
+
+
+
+        public Dia() {
+           // Comidas = new ObservableCollection<Comida>();
+        }
         public Dia(DateTime f, ObservableCollection<Comida> c)
         {
             Fecha = f;
             Comidas = c;
         }
+
 
         public List<Line> getPolyline(int minY, int maxY, int width)
         {
@@ -110,6 +120,11 @@ namespace PracticaFinal
 
         public string Nombre { get; set; }
         public double Calorias { get; set; }
+
+        public Comida()
+        {
+
+        }
         public Comida(string n, double c)
         {
             Nombre = n;

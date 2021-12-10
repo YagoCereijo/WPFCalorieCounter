@@ -10,9 +10,14 @@
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
 
-        <ListView Name="lista" Margin="20" Grid.Row="0" SelectionChanged="listaDiaSourceChanged">
+        <ListView Name="listaDia" Margin="20" Grid.Row="0" Grid.ColumnSpan="2" SelectionChanged="listaDiaSourceChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="100" Header="FECHA" DisplayMemberBinding="{Binding Fecha, StringFormat = {}{0:dd-MM-yyyy}}">
@@ -30,10 +35,12 @@
                         </GridViewColumn.HeaderContainerStyle>
                     </GridViewColumn>
                 </GridView>
+                
+                
             </ListView.View>
         </ListView>
 
-        <ListView Name="listaDia" Margin="20" Grid.Row="1">
+        <ListView Name="listaComida" Margin="20" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="100" Header="COMIDA" DisplayMemberBinding="{Binding Nombre}">
@@ -53,5 +60,9 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <Button Width="100" Height="30" HorizontalAlignment="Center" Content="Borrar Día" Grid.Row="2" Grid.Column="0" Click="borrarDia"/>
+        <Button Name="botonBorrarComida"  Width="100" Height="30" HorizontalAlignment="Center" Content="Borrar Comida" Grid.Row="2" Grid.Column="1" Click="borrarComida"></Button>
+
     </Grid>
 </Window>

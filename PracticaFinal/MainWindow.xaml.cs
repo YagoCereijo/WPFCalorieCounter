@@ -7,25 +7,41 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Windows.Controls;
+using System.Text.Json;
+using System.IO;
 
 namespace PracticaFinal
 { 
     public partial class MainWindow : Window
     {
-        ObservableCollection<Dia> dias;
+        ObservableCollection<Dia> Dias { get; set; }
         ListaCalorias listaCalorias;
         Dia diaActual;
-        enum Meses { Enero, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre }
+        enum Meses { Enero = 1, Febrero, Marzo, Abril, Mayo, Junio, Julio, Agosto, Septiembre, Octubre, Noviembre, Diciembre }
         Meses mesActual;
+        int anioActual;
+        string path = AppDomain.CurrentDomain.BaseDirectory + "data.json";
+
         public MainWindow()
         {
             InitializeComponent();
-            mesActual = (Meses)(DateTime.Today.Month - 1);
+            mesActual = (Meses)(DateTime.Today.Month);
+            anioActual = (int)(DateTime.Today.Year);
             month.Content = mesActual.ToString();
-            dias = new ObservableCollection<Dia>();
-            dias.CollectionChanged += mesChart;
-            dias.CollectionChanged += onDiasManageInnerChange;
+            if (File.Exists(path))
+            {
+                string jsonString = File.ReadAllText(path);
+                Dias = JsonSerializer.Deserialize<ObservableCollection<Dia>>(jsonString);
+            }
+            else
+            {
+                Dias = new ObservableCollection<Dia>();
+            }
+
+            Dias.CollectionChanged += mesChart;
+            Dias.CollectionChanged += onDiasManageInnerChange;
             monthlyChart.SizeChanged += sizeChanged;
+            monthlyChart.Loaded += mesChart;
             dailyChart.SizeChanged += sizeChanged;
         }
 
@@ -35,16 +51,17 @@ namespace PracticaFinal
 
         public void ShowDayList(object sender, RoutedEventArgs e)
         {
-            listaCalorias = new ListaCalorias();
-            listaCalorias.lista.ItemsSource = dias;
+            listaCalorias = new ListaCalorias(Dias);
             listaCalorias.Owner = this;
-            listaCalorias.lista.SelectionChanged += diaChartChanged;
+            listaCalorias.listaDia.SelectionChanged += diaChartChanged;
+            listaCalorias.botonBorrarComida.Click += diaChartChanged;
             listaCalorias.Show();
         }
         public void ShowAddCalories(object sender, RoutedEventArgs e)
         {       
             AddCalories addCalories = new AddCalories();
             addCalories.Owner = this;
+            addCalories.calendario.DisplayDate = new DateTime(anioActual, (int)mesActual, 1);
             addCalories.ShowDialog();
             if (addCalories.DialogResult == true)
             {
@@ -52,11 +69,11 @@ namespace PracticaFinal
                 String comida = addCalories.comida_;
                 double calorias = addCalories.calorias_;
 
-                IEnumerable<Dia> resultsDia = dias.Where(d => d.Fecha.Equals(fecha));
+                IEnumerable<Dia> resultsDia = Dias.Where(d => d.Fecha.Equals(fecha));
                 if (!resultsDia.Any())
                 {
                     Dia d = new Dia(fecha, new ObservableCollection<Comida>{ new Comida(comida, calorias) });
-                    dias.Add(d);
+                    Dias.Add(d);
                 }
                 else
                 {
@@ -77,10 +94,6 @@ namespace PracticaFinal
                 }    
             }
         }
-
-
-
-
 
         // MANAGEMENT OF THE CHART
 
@@ -103,31 +116,36 @@ namespace PracticaFinal
                 }
             }
         }
-        void mesChart(Object sender, EventArgs e){ monthlyChart.DrawMonth(dias.ToList()); } 
+        void mesChart(Object sender, EventArgs e){ monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual); } 
         void sizeChanged(object sender,  EventArgs e)
         {
-            monthlyChart.DrawMonth(dias.ToList());
-            if(dailyChart.Visibility == Visibility.Visible) { dailyChart.DrawDay(diaActual.Comidas.ToList()); }
+            if(monthlyChart.Visibility == Visibility.Visible) monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual);
+            else if(dailyChart.Visibility == Visibility.Visible) dailyChart.DrawDay(diaActual.Comidas.ToList());
         }
         void diaChartChanged(object sender, EventArgs e)
         {
             monthlyChart.Visibility = Visibility.Hidden;
             dailyChart.Visibility = Visibility.Visible;
             backButton.Visibility = Visibility.Visible;
-            diaActual = (Dia)((ListView)sender).SelectedItem;
-            dailyChart.DrawDay(diaActual.Comidas.ToList());
-        }
-        void diaChart(object sender, EventArgs e)
-        {
-            if(dailyChart.Visibility == Visibility.Visible)
+            diaActual = (Dia)listaCalorias.listaDia.SelectedItem;
+
+            if (diaActual != null)
             {
                 dailyChart.DrawDay(diaActual.Comidas.ToList());
             }
-            
+            else
+            {
+                monthlyChart.Visibility = Visibility.Visible;
+                monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual);
+                dailyChart.Visibility = Visibility.Hidden;
+                backButton.Visibility = Visibility.Hidden;
+            }
         }
+        void diaChart(object sender, EventArgs e){ if (dailyChart.Visibility == Visibility.Visible) dailyChart.DrawDay(diaActual.Comidas.ToList());}
         void backToMonthly(object sender, RoutedEventArgs e)
         {
             monthlyChart.Visibility = Visibility.Visible;
+            monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual);
             dailyChart.Visibility = Visibility.Hidden;
             backButton.Visibility = Visibility.Hidden;
         }
@@ -135,14 +153,34 @@ namespace PracticaFinal
         private void mesAnterior(object sender, RoutedEventArgs e)
         {
            
-            if(mesActual == Meses.Enero) { mesActual = Meses.Diciembre; } else { mesActual--; }
+            if(mesActual == Meses.Enero) 
+            { 
+                mesActual = Meses.Diciembre;
+                year.Content = --anioActual;
+            } 
+            else { mesActual--; }
             month.Content = mesActual.ToString();
+            monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual);
         }
 
         private void mesSiguiente(object sender, RoutedEventArgs e)
         {
-            if (mesActual == Meses.Diciembre) { mesActual = Meses.Enero; } else { mesActual++; }
+            if (mesActual == Meses.Diciembre) 
+            { 
+                mesActual = Meses.Enero;
+                year.Content = ++anioActual;
+            } 
+            else { mesActual++; }
             month.Content = mesActual.ToString();
+            monthlyChart.DrawMonth(Dias.ToList(), (int)mesActual, anioActual);
+
+        }
+
+        private void saveCollectionOnClose(object sender, EventArgs e)
+        {
+            string jsonString = JsonSerializer.Serialize(Dias);
+            File.WriteAllText(path, jsonString);
         }
     }
 }
+
