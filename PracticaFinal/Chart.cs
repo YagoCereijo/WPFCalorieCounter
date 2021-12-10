@@ -128,7 +128,18 @@ namespace PracticaFinal
         {
             Draw();
             int width = (X2 - X1) / 6;
+            int height = Y2 - Y1;
             int i = 1;
+
+            for (int j = 300; j <= 1500; j += 300)
+            {
+                TextBlock label = new TextBlock();
+                label.Text = j.ToString();
+                label.Foreground = Brushes.Black;
+                Canvas.SetLeft(label, X1 - 30);
+                Canvas.SetBottom(label, Y1 + j * height / (1500) - 6);
+                Children.Add(label);
+            }
 
             foreach (Comida c in comidas)
             {
@@ -136,8 +147,16 @@ namespace PracticaFinal
                 int x = (X1 + (width * i)) - (width / 2) + 1;
                 linea.X1 = x;
                 linea.X2 = x;
+                linea.ToolTip = c.Calorias;
                 Children.Add(linea);
                 i++;
+
+                TextBlock label = new TextBlock();
+                label.Text = c.Nombre;
+                label.Foreground = Brushes.Black;
+                Children.Add(label);
+                Canvas.SetLeft(label, x - width/3);
+                Canvas.SetTop(label, Y2);
             }
         }
 
