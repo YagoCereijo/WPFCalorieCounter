@@ -16,7 +16,7 @@
         <Viewbox Grid.Row="0" Stretch="Fill">
             <Calendar Name="calendario" BorderThickness="0"></Calendar>
         </Viewbox>
-        <ComboBox Name="comida" Grid.Row="1" Height="20" Width="100" Text="SELECT" IsEditable="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+        <ComboBox Name="comida" FontWeight="Bold" Grid.Row="1" Height="40" Width="150" Text="SELECCIONA" IsEditable="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
             <ComboBoxItem>DESAYUNO</ComboBoxItem>
             <ComboBoxItem>APERITIVO</ComboBoxItem>
             <ComboBoxItem>COMIDA</ComboBoxItem>
@@ -26,9 +26,9 @@
         </ComboBox>
         <DockPanel Grid.Row="2" VerticalAlignment="Center" Margin="10">
             <TextBox Text="{Binding ElementName=calorias, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Center" Width="40" />
-            <Slider Name="calorias" Maximum="1500"/>
-        </DockPanel>
-        <Button Content="ADD" Grid.Row="3" Height="30" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="40,0" Click="addCalories"></Button>
-        <Button Content="CANCEL" Grid.Row="3" Height="30" Width="60" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0" Click="closeWindow"></Button>
+            <Slider Name="calorias" Minimum="100" Maximum="1500" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel> 
+        <Button Content="AÑADIR" Grid.Row="3" Height="30" Width="80" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="30,0" Click="addCalories"></Button>
+        <Button Content="CANCELAR" Grid.Row="3" Height="30" Width="80" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0" Click="closeWindow"></Button>
     </Grid>
 </Window>

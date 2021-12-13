@@ -22,16 +22,16 @@
         </Grid.ColumnDefinitions>
 
         <Button x:Name="backButton" Grid.Row="0" Grid.RowSpan="2" Visibility="Hidden" Grid.Column="0" Content="&#x21A9;" BorderThickness="0" Background="Transparent" Margin="60,0" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="backToMonthly"></Button>
-        <Button Grid.Row="0" Grid.Column="0" Content="&#x2770;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="mesAnterior"></Button>
-        <Button Grid.Row="0" Grid.Column="2" Content="&#x2771;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="mesSiguiente"></Button>
+        <Button Name="previousButton" Grid.Row="0" Grid.Column="0" Content="&#x2770;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="mesAnterior"></Button>
+        <Button Name="nextButton" Grid.Row="0" Grid.Column="2" Content="&#x2771;" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="mesSiguiente"></Button>
         <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="&#x2637;" BorderThickness="0" Background="Transparent" Margin="60,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="ShowDayList"></Button>
         <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="&#x271A;" BorderThickness="0" Background="Transparent" Margin="20,0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="30" FontWeight="Bold" Click="ShowAddCalories"></Button>
         <local:Chart Visibility="Visible" x:Name="monthlyChart" Grid.Row="2" Grid.ColumnSpan="3"/>
-        <local:Chart Visibility="Hidden" x:Name="dailyChart" Grid.Row="2" Grid.ColumnSpan="3"/>
+        <local:Chart Visibility="Collapsed" x:Name="dailyChart" Grid.Row="2" Grid.ColumnSpan="3"/>
 
         <Label Padding="0" Name="month" Content="Noviembre" Height="40" Grid.Column="1" FontSize="25" HorizontalAlignment="Center" FontWeight="Bold" VerticalAlignment="Top"/>
-
         <Label Padding="0" Name="year" Content="2021" Height="20" Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontWeight="Bold"/>
+        <Label Padding="0" Name="date" Content="22/12/2022" Height="40" Grid.Column="1" Grid.Row="0" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Center" FontWeight="Bold" Visibility="Collapsed"/>
         
 
     </Grid>

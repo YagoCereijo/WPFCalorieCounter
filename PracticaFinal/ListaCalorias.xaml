@@ -34,6 +34,9 @@
                             </Style>
                         </GridViewColumn.HeaderContainerStyle>
                     </GridViewColumn>
+
+
+     
                 </GridView>
                 
                 
@@ -57,6 +60,7 @@
                             </Style>
                         </GridViewColumn.HeaderContainerStyle>
                     </GridViewColumn>
+                    
                 </GridView>
             </ListView.View>
         </ListView>

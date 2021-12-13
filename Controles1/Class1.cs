@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Controles1
+﻿namespace Controles1
 {
     class Amigo
     {

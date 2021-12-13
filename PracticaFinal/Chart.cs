@@ -8,14 +8,14 @@ using System.Windows.Shapes;
 
 namespace PracticaFinal
 {
-    public class Chart: Canvas, INotifyPropertyChanged
+    public class Chart : Canvas, INotifyPropertyChanged
     {
         private int x1, x2, y1, y2;
 
         public int X1
         {
             get { return x1; }
-            set { x1 = value;}
+            set { x1 = value; }
         }
 
         public int X2
@@ -86,13 +86,13 @@ namespace PracticaFinal
             int width = (X2 - X1) / 32;
             int y = Y2;
             int height = Y2 - Y1;
-            for (int i = 1500; i<=1500*6; i += 1500)
+            for (int i = 1500; i <= 1500 * 6; i += 1500)
             {
                 TextBlock label = new TextBlock();
                 label.Text = i.ToString() + " -";
                 label.Foreground = Brushes.Black;
                 Canvas.SetLeft(label, X1 - 30);
-                Canvas.SetBottom(label, Y1 + i*height/(1500*6) - 6 );
+                Canvas.SetBottom(label, Y1 + i * height / (1500 * 6) - 6);
                 Children.Add(label);
             }
 
@@ -103,14 +103,14 @@ namespace PracticaFinal
                 int x = X1 + (width * d.Fecha.Day);
 
                 List<Line> lineas = d.getPolyline(Y1, Y2, width);
+                EventArgs e = new EventArgs();
+                
 
                 foreach (Line l in lineas)
                 {
                     l.X1 = x;
                     l.X2 = x;
 
-                    l.ToolTip = d.Fecha;
-                  
                     Children.Add(l);
                 }
 
@@ -120,7 +120,7 @@ namespace PracticaFinal
                 Children.Add(label);
                 Canvas.SetLeft(label, x - 6);
                 Canvas.SetTop(label, Y2);
-                
+
             }
         }
 
@@ -140,14 +140,13 @@ namespace PracticaFinal
                 Canvas.SetBottom(label, Y1 + j * height / (1500) - 6);
                 Children.Add(label);
             }
-
+            
             foreach (Comida c in comidas)
             {
                 Line linea = c.getLine(Y1, Y2, width);
                 int x = (X1 + (width * i)) - (width / 2) + 1;
                 linea.X1 = x;
                 linea.X2 = x;
-                linea.ToolTip = c.Calorias;
                 Children.Add(linea);
                 i++;
 
@@ -155,7 +154,7 @@ namespace PracticaFinal
                 label.Text = c.Nombre;
                 label.Foreground = Brushes.Black;
                 Children.Add(label);
-                Canvas.SetLeft(label, x - width/3);
+                Canvas.SetLeft(label, x - width / 3);
                 Canvas.SetTop(label, Y2);
             }
         }

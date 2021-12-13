@@ -22,7 +22,7 @@ namespace PracticaFinal
             { "OTROS", Brushes.Pink }
         };
         private static int maxCalories = 1500;
-        
+
         public ObservableCollection<Comida> comidas;
 
 
@@ -30,7 +30,7 @@ namespace PracticaFinal
         {
             get
             {
-                double cal = 0;
+                int cal = 0;
                 foreach (Comida c in Comidas) cal += c.Calorias;
                 return cal;
             }
@@ -38,12 +38,13 @@ namespace PracticaFinal
 
         public DateTime Fecha { get; set; }
 
-        public ObservableCollection<Comida> Comidas{
+        public ObservableCollection<Comida> Comidas
+        {
             get
             {
                 return comidas;
             }
-            set 
+            set
             {
                 if (value != null)
                 {
@@ -56,9 +57,7 @@ namespace PracticaFinal
 
 
 
-        public Dia() {
-           // Comidas = new ObservableCollection<Comida>();
-        }
+        public Dia() { }
         public Dia(DateTime f, ObservableCollection<Comida> c)
         {
             Fecha = f;
@@ -72,17 +71,24 @@ namespace PracticaFinal
             int y = maxY;
             int height = maxY - minY;
 
-            foreach(Comida c in Comidas)
-            {               
-                Line linea = new Line();
-                linea.Y1 = y;
-                y = y - ((int)c.Calorias * height / 6 / maxCalories);
-                linea.Y2 = y;
+            foreach (String n in nombreComidas)
+            {
+                foreach (Comida c in Comidas)
+                {
+                    if (c.Nombre.Equals(n))
+                    {
+                        Line linea = new Line();
+                        linea.Y1 = y;
+                        y = y - (c.Calorias * height / 6 / maxCalories);
+                        linea.Y2 = y;
 
-                linea.StrokeThickness = width;
-                linea.Stroke = colorComidas[c.Nombre];
-     
-                customPolyline.Add(linea);     
+                        linea.StrokeThickness = width;
+                        linea.Stroke = colorComidas[c.Nombre];
+                        linea.ToolTip = c.Nombre + " " + c.Calorias + " cal";
+
+                        customPolyline.Add(linea);
+                    }
+                }
             }
 
             return customPolyline;
@@ -119,23 +125,20 @@ namespace PracticaFinal
         private static int maxCalories = 1500;
 
         public string Nombre { get; set; }
-        public double Calorias { get; set; }
-
-        public Comida()
-        {
-
-        }
-        public Comida(string n, double c)
+        public int Calorias { get; set; }
+        public Action LaunchDay { get; set; }
+        public Comida() { }
+        public Comida(string n, int c)
         {
             Nombre = n;
             Calorias = c;
         }
 
         public Line getLine(int minY, int maxY, int width)
-        {           
+        {
             int y = maxY;
             int height = maxY - minY;
-           
+
             Line linea = new Line();
             linea.Y1 = y;
             y = y - ((int)Calorias * height / maxCalories);
@@ -143,10 +146,11 @@ namespace PracticaFinal
 
             linea.StrokeThickness = width;
             linea.Stroke = colorComidas[Nombre];
+            linea.ToolTip = Calorias;
 
             return linea;
         }
     }
 
-    
+
 }
